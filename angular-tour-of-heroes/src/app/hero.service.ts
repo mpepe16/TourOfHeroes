@@ -9,6 +9,15 @@ import { catchError, map, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class HeroService {
+  /** DELETE: delete the hero from the server */
+deleteHero(id: number): Observable<Hero> {
+  const url = `${this.heroesUrl}/${id}`;
+
+  return this.http.delete<Hero>(url, this.httpOptions).pipe(
+    tap(_ => this.log(`deleted hero id=${id}`)),
+    catchError(this.handleError<Hero>('deleteHero'))
+  );
+}
 
   private heroesUrl = 'api/heroes';  // URL to web api
   httpOptions = {
@@ -78,5 +87,19 @@ addHero(hero: Hero): Observable<Hero> {
   constructor(
     private messageService: MessageService,
     private http: HttpClient) {
+   }
+
+   searchHeros(term: string): Observable<Hero[]> {
+    if(!term.trim()){
+
+      // if not search term, return empty array of hero
+      return of([]);
+    }
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+      tap(x => x.length ?
+         this.log(`found heroes matching "${term}"`) :
+         this.log(`no heroes matching "${term}"`)),
+      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    );
    }
 }
