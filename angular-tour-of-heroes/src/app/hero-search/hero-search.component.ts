@@ -29,8 +29,6 @@ export class HeroSearchComponent implements OnInit {
     this.heroes$ = this.searchTerms.pipe(
       // wait 300ms after each keystroke before considering the term
       debounceTime(300),
-      console.log('Init happens'),
-
       // ignore new term if same as previous term
       distinctUntilChanged(),
 
