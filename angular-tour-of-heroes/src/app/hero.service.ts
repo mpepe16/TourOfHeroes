@@ -89,7 +89,7 @@ addHero(hero: Hero): Observable<Hero> {
     private http: HttpClient) {
    }
 
-   searchHeros(term: string): Observable<Hero[]> {
+   searchHeroes(term: string): Observable<Hero[]> {
     if(!term.trim()){
 
       // if not search term, return empty array of hero
